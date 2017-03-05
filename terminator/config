@@ -1,0 +1,49 @@
+[global_config]
+  borderless = True
+  hide_from_taskbar = True
+[keybindings]
+  new_tab = <Primary>t
+  next_tab = <Primary>Tab
+[layouts]
+  [[default]]
+    [[[child1]]]
+      parent = window0
+      type = Terminal
+    [[[window0]]]
+      parent = ""
+      type = Window
+  [[nhz]]
+    [[[child0]]]
+      fullscreen = False
+      last_active_term = efd811c9-15b5-406c-80d4-262a252b331b
+      last_active_window = True
+      maximised = False
+      order = 0
+      parent = ""
+      position = 0:0
+      size = 680, 747
+      title = nhz@32042pf: ~
+      type = Window
+    [[[terminal1]]]
+      order = 0
+      parent = child0
+      profile = default
+      type = Terminal
+      uuid = efd811c9-15b5-406c-80d4-262a252b331b
+[plugins]
+[profiles]
+  [[default]]
+    background_darkness = 0.42
+    background_type = transparent
+    cursor_color = "#aaaaaa"
+    cursor_color_fg = False
+    font = Source Code Pro Bold 10
+    foreground_color = "#00ff00"
+    palette = "#073642:#dc322f:#859900:#b58900:#268bd2:#d33682:#2aa198:#eee8d5:#002b36:#cb4b16:#586e75:#657b83:#839496:#6c71c4:#93a1a1:#fdf6e3"
+    use_system_font = False
+  [[nhz]]
+    background_type = transparent
+    copy_on_selection = True
+    cursor_color = "#aaaaaa"
+    font = Source Code Pro Light 10
+    use_system_font = False
