@@ -1,5 +1,5 @@
 set nocompatible              " be iMproved, required
-filetype off                  " required
+filetype on
 
 set foldmethod=syntax
 " set the runtime path to include Vundle and initialize
@@ -42,7 +42,6 @@ Plugin 'marijnh/tern_for_vim'
 
 Plugin 'scrooloose/nerdtree'
 
-Plugin 'tpope/vim-surround'
 Plugin 'kien/ctrlp.vim'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'bling/vim-airline'
@@ -157,6 +156,10 @@ au BufNewFile,BufRead *.js, *.html, *.css
 			\ set shiftwidth=2
 
 "-----------Python-------------
+autocmd FileType python set sw=4
+autocmd FileType python set ts=4
+autocmd FileType python set sts=4
+
 Plugin 'vim-scripts/indentpython.vim'
 au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 au BufNewFile,BufRead *.py
@@ -175,7 +178,7 @@ Plugin 'scrooloose/syntastic'
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
-
+"
 " let g:syntastic_always_populate_loc_list = 1
 " let g:syntastic_auto_loc_list = 1
 " let g:syntastic_check_on_open = 0
@@ -216,6 +219,60 @@ let g:ycm_key_list_previous_completion = ['<C-k>', '<Up>']
 " Goto definition with F3
 map <F3> :YcmCompleter GoTo<CR>
 
+"### https://github.com/PyCQA/pyflakes
+Plugin 'PyCQA/pyflakes'
 
 "Indent
 noremap <leader>= gg<S-v><S-g>=
+
+"### https://github.com/tpope/vim-surround
+Plugin 'tpope/vim-surround'
+
+" -----------Django--------------
+
+"### https://github.com/jmcomets/vim-pony/
+Plugin 'jmcomets/vim-pony'
+
+let g:last_relative_dir = ''
+nnoremap \1 :call RelatedFile ("models.py")<cr>
+nnoremap \2 :call RelatedFile ("views.py")<cr>
+nnoremap \3 :call RelatedFile ("urls.py")<cr>
+nnoremap \4 :call RelatedFile ("admin.py")<cr>
+nnoremap \5 :call RelatedFile ("tests.py")<cr>
+nnoremap \6 :call RelatedFile ( "templates/" )<cr>
+nnoremap \7 :call RelatedFile ( "templatetags/" )<cr>
+nnoremap \8 :call RelatedFile ( "management/" )<cr>
+nnoremap \0 :e settings.py<cr>
+nnoremap \9 :e urls.py<cr>
+
+fun! RelatedFile(file)
+    #This is to check that the directory looks djangoish
+    if filereadable(expand("%:h"). '/models.py') || isdirectory(expand("%:h") . "/templatetags/")
+        exec "edit %:h/" . a:file
+        let g:last_relative_dir = expand("%:h") . '/'
+        return ''
+    endif
+    if g:last_relative_dir != ''
+        exec "edit " . g:last_relative_dir . a:file
+        return ''
+    endif
+    echo "Cant determine where relative file is : " . a:file
+    return ''
+endfun
+
+fun SetAppDir()
+    if filereadable(expand("%:h"). '/models.py') || isdirectory(expand("%:h") . "/templatetags/")
+        let g:last_relative_dir = expand("%:h") . '/'
+        return ''
+    endif
+endfun
+autocmd BufEnter *.py call SetAppDir()
+
+" -----------HTML --------------
+
+"### xmledit
+Plugin 'sukima/xmledit'
+
+" -----------Make Like IDE ----------
+"### https://github.com/vim-scripts/project.tar.gz
+Plugin 'vim-scripts/project.tar.gz'
