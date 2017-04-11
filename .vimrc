@@ -1,9 +1,47 @@
 set nocompatible              " be iMproved, required
+set hidden
+set nowrap
 filetype on
-
 set foldmethod=syntax
+map  <C-l> :tabn<CR>
+map  <C-h> :tabp<CR>
+map  <C-n> :tabnew<CR>
+
+" Copy Paste on System Clipboard
+
+noremap <Leader>y "*y
+noremap <Leader>p "*p
+noremap <Leader>Y "+y
+noremap <Leader>P "+p
+" hack to swap lines
+function! s:swap_lines(n1, n2)
+	let line1 = getline(a:n1)
+	let line2 = getline(a:n2)
+	call setline(a:n1, line2)
+	call setline(a:n2, line1)
+endfunction
+function! s:swap_up()
+	let n = line('.')
+	if n == 1
+		return
+	endif
+	call s:swap_lines(n, n - 1)
+	exec n - 1
+endfunction
+function! s:swap_down()
+	let n = line('.')
+	if n == line('$')
+		return
+	endif
+	call s:swap_lines(n, n + 1)
+	exec n + 1
+endfunction
+noremap <silent> <s-up> :call <SID>swap_up()<CR>
+noremap <silent> <s-down> :call <SID>swap_down()<CR>
+
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
+
 call vundle#begin()
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
@@ -40,7 +78,10 @@ autocmd FileType typescript :set makeprg=tsc
 
 Plugin 'marijnh/tern_for_vim'
 
+"###Plugin Nerdtree
 Plugin 'scrooloose/nerdtree'
+let NERDTreeIgnore = ['\.pyc$']
+let NERDTreeShowHidden=1
 
 Plugin 'kien/ctrlp.vim'
 Plugin 'altercation/vim-colors-solarized'
@@ -67,7 +108,6 @@ let g:lightline = {
 			\ 'subseparator': { 'left': '', 'right': '' }
 			\ }
 
-Plugin 'scrooloose/nerdcommenter'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'mattn/emmet-vim'
 let g:user_emmet_mode='a'    "enable all function in all mode."
@@ -82,7 +122,6 @@ Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'Raimondi/delimitMate'
 
 
-Plugin 'editorconfig/editorconfig-vim'
 
 Plugin 'bling/vim-bufferline'
 let g:bufferline_echo = 1
@@ -128,7 +167,6 @@ set backspace=indent,eol,start
 let mapleader = ' '
 
 
-
 "--------Search--------
 set hlsearch
 set incsearch
@@ -138,6 +176,9 @@ set incsearch
 
 "Making it easy to edit he vimrc file
 nmap <Leader>ed:tabedit $MYVIMRC<cr>
+
+noremap <leader>d :bd<CR>
+noremap <leader>k :bn!<CR>
 
 "Tab
 
@@ -161,7 +202,7 @@ autocmd FileType python set ts=4
 autocmd FileType python set sts=4
 
 Plugin 'vim-scripts/indentpython.vim'
-au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
+"au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 au BufNewFile,BufRead *.py
 			\ set tabstop=4
 			\ set softtabstop=4
@@ -174,22 +215,33 @@ au BufNewFile,BufRead *.py
 let python_highlight_all=1
 
 "####
-Plugin 'scrooloose/syntastic'
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-"
-" let g:syntastic_always_populate_loc_list = 1
-" let g:syntastic_auto_loc_list = 1
+"Plugin 'scrooloose/syntastic'
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+""
+"" let g:syntastic_always_populate_loc_list = 1
+"" let g:syntastic_auto_loc_list = 1
 " let g:syntastic_check_on_open = 0
-" let g:syntastic_check_on_wq = 1 
- let g:syntastic_python_checkers = ['pylint']
+" let g:syntastic_check_on_wq = 0 
+" let g:syntastic_python_checkers = ['pylint']
 
 " Closse Syntastic
-nnoremap <silent> <leader>e :lclose<CR>
-nnoremap <silent> <leader>w :Error<CR>
-cabbrev <silent> bd <C-r>=(getcmdtype()==#':' && getcmdpos()==1 ? 'lclose\|bdelete' : 'bd')<CR>
+"nnoremap <silent> <leader>e :lclose<CR>
+"nnoremap <silent> <leader>w :Error<CR>
+"cabbrev <silent> bd <C-r>=(getcmdtype()==#':' && getcmdpos()==1 ? 'lclose\|bdelete' : 'bd')<CR>
 
+"####
+Plugin 'w0rp/ale'
+
+let g:ale_linters = {
+\   'javascript': ['eslint'],
+\ 'python' : ['pylint'],
+\}
+
+let g:ale_sign_error = '>>'
+let g:ale_sign_warning = '--'
+let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
 "####
 Plugin 'nvie/vim-flake8'
 
@@ -237,7 +289,7 @@ let g:last_relative_dir = ''
 nnoremap \1 :call RelatedFile ("models.py")<cr>
 nnoremap \2 :call RelatedFile ("views.py")<cr>
 nnoremap \3 :call RelatedFile ("urls.py")<cr>
-nnoremap \4 :call RelatedFile ("admin.py")<cr>
+nnoremap \4 :call RelatedFile ("apis.py")<cr>
 nnoremap \5 :call RelatedFile ("tests.py")<cr>
 nnoremap \6 :call RelatedFile ( "templates/" )<cr>
 nnoremap \7 :call RelatedFile ( "templatetags/" )<cr>
@@ -246,25 +298,25 @@ nnoremap \0 :e settings.py<cr>
 nnoremap \9 :e urls.py<cr>
 
 fun! RelatedFile(file)
-    #This is to check that the directory looks djangoish
-    if filereadable(expand("%:h"). '/models.py') || isdirectory(expand("%:h") . "/templatetags/")
-        exec "edit %:h/" . a:file
-        let g:last_relative_dir = expand("%:h") . '/'
-        return ''
-    endif
-    if g:last_relative_dir != ''
-        exec "edit " . g:last_relative_dir . a:file
-        return ''
-    endif
-    echo "Cant determine where relative file is : " . a:file
-    return ''
+	#This is to check that the directory looks djangoish
+	if filereadable(expand("%:h"). '/models.py') || isdirectory(expand("%:h") . "/templatetags/")
+		exec "edit %:h/" . a:file
+		let g:last_relative_dir = expand("%:h") . '/'
+		return ''
+	endif
+	if g:last_relative_dir != ''
+		exec "edit " . g:last_relative_dir . a:file
+		return ''
+	endif
+	echo "Cant determine where relative file is : " . a:file
+	return ''
 endfun
 
 fun SetAppDir()
-    if filereadable(expand("%:h"). '/models.py') || isdirectory(expand("%:h") . "/templatetags/")
-        let g:last_relative_dir = expand("%:h") . '/'
-        return ''
-    endif
+	if filereadable(expand("%:h"). '/models.py') || isdirectory(expand("%:h") . "/templatetags/")
+		let g:last_relative_dir = expand("%:h") . '/'
+		return ''
+	endif
 endfun
 autocmd BufEnter *.py call SetAppDir()
 
@@ -276,3 +328,41 @@ Plugin 'sukima/xmledit'
 " -----------Make Like IDE ----------
 "### https://github.com/vim-scripts/project.tar.gz
 Plugin 'vim-scripts/project.tar.gz'
+
+" -----------Evernote----------
+Plugin 'kakkyz81/evervim'
+
+"###https://github.com/editorconfig/editorconfig-vim
+Plugin 'editorconfig/editorconfig-vim'
+let g:EditorConfig_exec_path = '/usr/local/bin/editorconfig'
+
+"###NerdCommenteri https://github.com/scrooloose/nerdcommenter
+Plugin 'scrooloose/nerdcommenter'
+" Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
+
+" Use compact syntax for prettified multi-line comments
+let g:NERDCompactSexyComs = 1
+
+" Align line-wise comment delimiters flush left instead of following code indentation
+let g:NERDDefaultAlign = 'left'
+
+" Set a language to use its alternate delimiters by default
+let g:NERDAltDelims_java = 1
+
+" Add your own custom formats or override the defaults
+let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
+
+" Allow commenting and inverting empty lines (useful when commenting a region)
+let g:NERDCommentEmptyLines = 1
+
+" Enable trimming of trailing whitespace when uncommenting
+let g:NERDTrimTrailingWhitespace = 1
+
+
+"###pydocstring https://github.com/heavenshell/vim-pydocstring
+Plugin 'heavenshell/vim-pydocstring'
+autocmd FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
+nmap <silent> <leader>dd <Plug>(pydocstring)
+
+
