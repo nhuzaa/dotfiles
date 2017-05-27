@@ -8,7 +8,10 @@ map  <C-h> :tabp<CR>
 map  <C-n> :tabnew<CR>
 
 " Copy Paste on System Clipboard
-
+function Func2X11()
+:call system('xclip -selection c', @r)
+endfunction
+vnoremap <F9> "ry:call Func2X11()<cr>
 noremap <Leader>y "*y
 noremap <Leader>p "*p
 noremap <Leader>Y "+y
@@ -68,6 +71,11 @@ Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
 
 "Javascript auto-complete
 Plugin 'pangloss/vim-javascript'
+let g:javascript_plugin_jsdoc = 1
+
+"React VIM
+Plugin 'mxw/vim-jsx'
+let g:jsx_ext_required = 0
 
 Plugin 'leafgarland/typescript-vim'
 let g:typescript_compiler_binary = 'tsc'
@@ -191,10 +199,12 @@ let g:javascript_plugin_jsdoc =1
 nnoremap ; :
 
 "----------Web Dev -----------
-au BufNewFile,BufRead *.js, *.html, *.css
+set tabstop=2
+au BufNewFile,BufRead *.js, *.html, *.css  
 			\ set tabstop=2
 			\ set softtabstop=2
 			\ set shiftwidth=2
+autocmd Filetype scss setlocal tabstop=4
 
 "-----------Python-------------
 autocmd FileType python set sw=4
@@ -365,4 +375,16 @@ Plugin 'heavenshell/vim-pydocstring'
 autocmd FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
 nmap <silent> <leader>dd <Plug>(pydocstring)
 
+"### VIM misc https://github.com/xolox/vim-misc
+Plugin 'xolox/vim-misc'
+
+"### VIM Session https://github.com/xolox/vim-session
+Plugin 'xolox/vim-session'
+let g:session_autoload = "no"
+let g:session_autoload = "no"
+let g:session_command_aliases = 1
+nnoremap <leader>so :OpenSession
+nnoremap <leader>ss :SaveSession
+nnoremap <leader>sd :DeleteSession
+nnoremap <leader>sc :CloseSession
 
