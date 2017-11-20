@@ -18,6 +18,7 @@ floating_modifier $mod
 
 # start a terminal
 bindsym $mod+Return exec terminator 
+bindsym $mod+u exec urxvt 
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -209,8 +210,14 @@ bindsym $mod+Home exec xbacklight +10
 bindsym $mod+End exec xbacklight -10
 
 #Start Up application
-exec feh --bg-fill ~/Pictures/walli/moutains.jpg
-
-
+exec feh --bg-fill ~/Pictures/walli/pexels-photo.jpg
+exec --no-startup-id xcompmgr -c -n
 exec --no-startup-id  nm-applet
-exec --no-startup-id chromium
+#exec --no-startup-id chromium
+for_window [class="^.*"] border pixel 1
+new_window 1pixel
+bindsym Print exec deepin-screenshot 
+bindsym $mod+Shift+Alt+0 exec nscreen 
+bindsym $mod+Shift+Alt+1 exec hscreen 
+
+#keyboard
