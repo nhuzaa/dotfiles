@@ -3,6 +3,12 @@ set hidden
 set nowrap
 set termguicolors
 filetype on
+let mapleader = ' '
+
+"fuzzy find ignore files
+set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png,*.ico
+set wildignore+=*.pdf,*.psd
+set wildignore+=node_modules/*,bower_components/*
 
 "--------Mapping----------
 map  <c-l> :tabn<cr>
@@ -11,17 +17,18 @@ map  <c-n> :tabnew<cr>
 
 
 "Making it easy to edit he vimrc file
-nmap <Leader>ed:tabedit $MYVIMRC<cr>
+nmap <leader>ed:tabedit $MYVIMRC<cr>
 
-noremap <leader>d :bd<CR>
+nmap <leader>d :ene<CR>:bw #<CR>
 noremap <leader>k :bn!<CR>
+noremap <leader>r :b #<CR>
+noremap <leader>gg gdf/gf 
 "Indent
 noremap <leader>= gg<S-v><S-g>=
 
 "--------END Mapping--------
 
-call plug#begin('~/.vim/plugged')
-
+call plug#begin('~/.vim/plugged') 
 " git plugin not hosted on github
 "plug 'git://git.wincent.com/command-t.git'
 Plug 'tpope/vim-fugitive'
@@ -85,7 +92,7 @@ Plug 'scrooloose/nerdtree', { 'On':  'nerdtreetoggle' }
 Plug 'w0rp/ale'
 Plug 'itchyny/lightline.vim'
 Plug 'airblade/vim-gitgutter'
-Plug 'mattn/emmet-vim'
+" Plug 'mattn/emmet-vim'
 Plug 'ervandew/supertab'
 Plug 'easymotion/vim-easymotion'
 
@@ -94,11 +101,15 @@ Plug 'nathanaelkane/vim-indent-guides'
 
 Plug 'raimondi/delimitmate'
 
-Plug 'kien/ctrlp.vim'
 Plug 'bling/vim-airline'
 Plug 'majutsushi/tagbar'
 "react vim
 Plug 'mxw/vim-jsx'
+Plug 'skywind3000/asyncrun.vim'
+Plug 'moll/vim-node'
+Plug 'prettier/vim-prettier', {
+  \ 'do': 'yarn install',
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown'] }
 
 "vim-notes
 Plug 'xolox/vim-notes'
@@ -114,8 +125,13 @@ Plug 'mileszs/ack.vim'
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'heavenshell/vim-jsdoc'
 
+" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+" Plug 'junegunn/fzf.vim'
+
 call plug#end()
 
+let g:EditorConfig_max_line_indicator = "fill"
+let g:EditorConfig_verbose = 1
 " Gruvbox setup
 let g:gruvbox_bold = 0
 if !has("gui_running")
@@ -137,16 +153,21 @@ let g:lightline = {
 
 nnoremap <leader>ss :w!<CR>
 
-" Copy Paste on System Clipboard
-function Func2X11()
-:call system('xclip -selection c', @r)
-endfunction
+let g:prettier#autoformat = 0
+autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md PrettierAsync
 
-vnoremap <F9> "ry:call Func2X11()<cr>
-noremap <Leader>y "*y
-noremap <Leader>p "*p
-noremap <Leader>Y "+y
-noremap <Leader>P "+p
+" Copy Paste on System Clipboard
+" function Func2X11()
+" :call system('xclip -selection c', @r)
+" endfunction
+
+
+" vnoremap <F9> "ry:call Func2X11()<cr>
+" noremap <Leader>y "*y
+" noremap <Leader>p "*p
+" noremap <Leader>Y "+y
+" noremap <Leader>P "+p
+
 " hack to swap lines
 function! s:swap_lines(n1, n2)
         let line1 = getline(a:n1)
@@ -198,7 +219,8 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 
-
+" Prettier JS
+autocmd BufWritePost *.js AsyncRun -post=checktime ./node_modules/.bin/eslint --fix %
 
 " All of your Plugs must be added before the following line
 filetype plugin indent on    " required
@@ -233,7 +255,6 @@ colorscheme gruvbox
 
 set backspace=indent,eol,start
 
-let mapleader = ' '
 
 
 "--------Search--------
@@ -281,8 +302,9 @@ let g:ale_linters = {
 \ 'python' : ['pylint'],
 \}
 
-let g:ale_sign_error = '>>'
-let g:ale_sign_warning = '--'
+let g:ale_sign_error = '●' " Less aggressive than the default '>>'
+let g:ale_sign_warning = '.'
+let g:ale_lint_on_enter = 0 " Less distracting when opening a new file
 let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
 "-----------END ALE Settings-------------
 "
@@ -373,3 +395,14 @@ let g:SuperTabMappingBackward = '<tab>'
 
 " Python 3 for deoplote
 let g:python3_host_prog = '/usr/bin/python3'
+
+"VIM Notes
+let g:notes_directories = [ '~/Dropbox/Shared Notes']
+
+" "emmet-vim
+" let g:user_emmet_leader_key='<c-tab>'
+" let g:user_emmet_settings = {
+"   \  'javascript.jsx' : {
+"     \      'extends' : 'jsx',
+"     \  },
+"   \}
