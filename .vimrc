@@ -8,7 +8,8 @@ let mapleader = ' '
 "fuzzy find ignore files
 set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png,*.ico
 set wildignore+=*.pdf,*.psd
-set wildignore+=node_modules/*,bower_components/*
+set wildignore+=node_modules/*,bower_components/*,venv/*
+map  <c-p> :FZF<cr>
 
 "--------Mapping----------
 map  <c-l> :tabn<cr>
@@ -125,9 +126,13 @@ Plug 'mileszs/ack.vim'
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'heavenshell/vim-jsdoc'
 
-" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-" Plug 'junegunn/fzf.vim'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'vimwiki/vimwiki'
 
+"Electronics
+
+"Arduino
 call plug#end()
 
 let g:EditorConfig_max_line_indicator = "fill"
@@ -157,12 +162,12 @@ let g:prettier#autoformat = 0
 autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md PrettierAsync
 
 " Copy Paste on System Clipboard
-" function Func2X11()
-" :call system('xclip -selection c', @r)
-" endfunction
+function Func2X11()
+:call system('xclip -selection c', @r)
+endfunction
 
 
-" vnoremap <F9> "ry:call Func2X11()<cr>
+vnoremap <F9> "ry:call Func2X11()<cr>
 " noremap <Leader>y "*y
 " noremap <Leader>p "*p
 " noremap <Leader>Y "+y
@@ -295,6 +300,9 @@ au BufNewFile,BufRead *.py
 
 let python_highlight_all=1
 
+"-----------C C++-------------
+set tabstop=2 shiftwidth=2 expandtab
+
 
 "-----------ALE Settings-------------
 let g:ale_linters = {
@@ -399,10 +407,8 @@ let g:python3_host_prog = '/usr/bin/python3'
 "VIM Notes
 let g:notes_directories = [ '~/Dropbox/Shared Notes']
 
-" "emmet-vim
-" let g:user_emmet_leader_key='<c-tab>'
-" let g:user_emmet_settings = {
-"   \  'javascript.jsx' : {
-"     \      'extends' : 'jsx',
-"     \  },
-"   \}
+"Arduino
+"
+
+"GIT: Fugitive"
+autocmd FileType gitcommit nmap <buffer> U :Git checkout -- <C-r><C-g><CR>
