@@ -1,9 +1,14 @@
 set nocompatible              
+set noswapfile
 set hidden
 set nowrap
 set termguicolors
 filetype on
 let mapleader = ' '
+let maplocalleader = '\'
+
+"No complain on save
+:au FocusLost * silent! wa
 
 "fuzzy find ignore files
 set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png,*.ico
@@ -129,6 +134,7 @@ Plug 'heavenshell/vim-jsdoc'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'vimwiki/vimwiki'
+Plug 'jceb/vim-orgmode'
 
 "Electronics
 
@@ -158,8 +164,8 @@ let g:lightline = {
 
 nnoremap <leader>ss :w!<CR>
 
-let g:prettier#autoformat = 0
-autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md PrettierAsync
+" let g:prettier#autoformat = 0
+" autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md PrettierAsync
 
 " Copy Paste on System Clipboard
 function Func2X11()
@@ -244,7 +250,6 @@ filetype plugin indent on    " required
 "NERDTreeToggle
 map <C-n> :NERDTreeToggle<CR>
 nmap <F8> :TagbarToggle<CR>
-set t_Co=256
 if has('gui_running')
         set background=dark
 else
@@ -256,7 +261,7 @@ set number
 set relativenumber
 syntax enable
 colorscheme gruvbox
-
+set t_Co=256
 
 set backspace=indent,eol,start
 
@@ -412,3 +417,14 @@ let g:notes_directories = [ '~/Dropbox/Shared Notes']
 
 "GIT: Fugitive"
 autocmd FileType gitcommit nmap <buffer> U :Git checkout -- <C-r><C-g><CR>
+
+" netrw
+" let g:netrw_banner = 0
+" let g:netrw_liststyle = 3
+" let g:netrw_browse_split = 4
+" let g:netrw_altv = 1
+" let g:netrw_winsize = 25
+" augroup ProjectDrawer
+"     autocmd!
+"       autocmd VimEnter * :Vexplore
+"     augroup END

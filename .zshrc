@@ -1,9 +1,18 @@
 
 # Path to your oh-my-zsh installation.
 export ZSH=/home/nhz/.oh-my-zsh
-# Ruby rbenv config
+export VISUAL=nvim
+export EDITOR="$VISUAL"
+export GIT_EDITOR=nvim
+export PATH=~/.local/bin:$PATH
+DISABLE_UNTRACKED_FILES_DIRTY="true"
+#Ruby rbenv config
 export PATH="$HOME/.rbenv/bin:$PATH"``
 eval "$(rbenv init -)"
+
+export WORKON_HOME=$HOME/.virtualenvs
+export PROJECT_HOME=$HOME/Devel
+source /usr/bin/virtualenvwrapper.sh
 
 
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -95,12 +104,12 @@ alias dscreen="~/.screenlayout/dellscreen.sh && feh --bg-fill ~/Pictures/walli/I
 alias nscreen="~/.screenlayout/normalscreen.sh"
 alias hscreen="~/.screenlayout/hscreen.sh"
 alias meetscreen="~/.screenlayout/meetscreen.sh"
-alias fsc="~/.screenlayout/dellhdmi.sh && feh --bg-fill ~/Pictures/walli/IMG_20171026_080650.jpg"
+alias fsc="~/.screenlayout/dellhdmi.sh && feh --bg-fill ~/Pictures/walli/autumn-autumn-leaves-blur-589840.jpg"
 alias sysm="gnome-system-monitor"
 alias ran="ranger"
 alias red='redshift -O 1800'
-#alias python="python2.7"
-alias py="python2.7"
+alias python='python2.7'
+alias py="python3"
 alias ac="source ~/Code/acustreamenv/bin/activate && cd ~/Code/knowledge_base/acustream_intranet"
 alias acs="source ~/Code/acustreamenv/bin/activate && cd ~/Code/knowledge_base/acustream_intranet && python manage.py runserver"
 # alias tl="cd /home/nhz/Code/Personal/traffic-light && source venv/bin/activate"
@@ -116,8 +125,11 @@ alias tg="cd /home/nhz/Code/testGround"
 alias rec="cd ~/Code/learn/react"
 alias rewifi="sudo ip link set wlp3s0b1 down  && sudo ip link set wlp3s0b1 up"
 alias rnra="react-native run-android"
-alias resetnet="sudo ip addr flush dev enp4s0 && sudo ip addr flush dev wlp3s0b1 && sleep 3 && sudo ip link set enp4s0 down  && sudo ip link set wlp3s0b1 down && sleep 3 && sudo ip link set enp4s0 up && sudo ip link set wlp3s0b1 up"
+alias resetnet="sudo ip addr flush dev enp0s20u2 && sleep 3 && sudo ip link set enp0s20u2 ndown && sleep 3 && sudo ip link set enp0s20u2 up"
+alias resetnet2="sudo ip addr flush dev wlp3s0 && sleep 3 && sudo ip link set wlp3s0 down && sleep 3 && sudo ip link set wlp3s0 up"
 alias e="exit"
+alias per="cd ~/Code/Personal"
+alias note="cd ~/vimwiki"
 export EDITOR=vim
 
 
@@ -140,7 +152,7 @@ vpn(){
         one_time_pass=$(oathtool -b --totp HA47IO2I6SUG3LKC)
         rm -rf onetimepass
         echo $one_time_pass | xclip -in -selection clipboard
-        echo $one_time_pass > onetimepass
+        echo $one_time_pass > onetimepass 
         sudo openvpn --config ~/selfConfig/client.ovpn 
 }
 lock(){
@@ -148,6 +160,6 @@ lock(){
 }
 
 export ANDROID_HOME=/home/nhz/Android/Sdk
-export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+# [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
